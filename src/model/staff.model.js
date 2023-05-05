@@ -10,6 +10,10 @@ const Staff = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
+    employee_id:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -35,9 +39,8 @@ const Staff = sequelize.define(
       allowNull: false,
     },
     role:{
-      type: DataTypes.ENUM('user', 'staff', 'doctor', 'ceo'),
-      allowNull: false,
-      defaultValue: 'user' 
+      type: DataTypes.ENUM('user', 'staff', 'doctor', 'admin'),
+      allowNull: true,
     }
   },
   {
