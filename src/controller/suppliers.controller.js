@@ -1,22 +1,25 @@
 
 const Suppliers = require("../model/supplier.model");
 exports.create = (req, res) => {
+try {
   Suppliers.create({ ...req.body })
-    .then((data) => {
-      if (data) {
-        return res.status(200).json({ result: data });
-      }
-      return res.status(400).json({ message: "Some thing when wrong" });
-    })
-    .catch((error) => {
-      return res.status(500).json({ message: error });
-    });
+  .then((data) => {
+    if (data) {
+      return res.status(200).json({ result: data });
+    }
+    return res.status(400).json({ message: "Some thing when wrong" });
+  })
+  .catch((error) => {
+    return res.status(500).json({ message: "FAILED" });
+  });
+} catch (error) {
+  return res.status(500).json({ message: error });
+}
 };
 // get all supplier
 exports.getAll = async (req, res) => {
   try {
     await Suppliers.findAndCountAll().then((data) => {
-      console.log(data.rows)
       return res.status(200).json(data);
     });
   } catch (error) {

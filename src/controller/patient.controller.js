@@ -1,16 +1,20 @@
 const Suppliers = require("../model/supplier.model")
 const Patients = require('../model/patients.model')
-exports.create = (req, res) => {
-  Patients.create({ ...req.body })
-    .then((data) => {
-      if (data) {
-        return res.status(200).json(data);
-      }
-      return res.status(400).json({ message: "Some thing when wrong" });
-    })
-    .catch((error) => {
-      return res.status(500).json({ message: error });
-    });
+exports.create = async (req, res) => {
+try {
+  await Patients.create({ ...req.body })
+  .then((data) => {
+    if (data) {
+      return res.status(200).json(data);
+    }
+    return res.status(400).json({ message: "Some thing when wrong" });
+  })
+  .catch((error) => {
+    return res.status(500).json({ message: 'Faild' });
+  });
+} catch (error) {
+  return res.status(500).json({ message: error });
+}
 };
 // get all supplier
 exports.getAll = async (req, res) => {
