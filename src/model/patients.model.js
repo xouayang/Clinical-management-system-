@@ -24,6 +24,10 @@ const Patients = sequelize.define(
     },
     birtday: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    details:{
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
