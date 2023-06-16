@@ -2,6 +2,9 @@ const Suppliers = require("../model/supplier.model")
 const Patients = require('../model/patients.model')
 exports.create = async (req, res) => {
 try {
+  if(!req.body) {
+    return res.status(400).json({message:"error"})
+  }
   await Patients.create({ ...req.body })
   .then((data) => {
     if (data) {
