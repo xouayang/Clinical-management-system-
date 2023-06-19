@@ -1,8 +1,8 @@
 const FirstCheck = require("../model/firstCheck.model");
 
-exports.create = (req, res) => {
+exports.create = async (req, res) => {
   try {
-    FirstCheck.create({ ...req.body })
+  await FirstCheck.create({ ...req.body })
       .then((data) => {
         if (data) {
           return res.status(200).json(data);
@@ -10,9 +10,10 @@ exports.create = (req, res) => {
         return res.status(400).json({ message: "Some thing when wrong" });
       })
       .catch((error) => {
-        return res.status(500).json({ message: error });
+        return res.status(500).json({message:error.message});
       });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: error.message });
   }
 };

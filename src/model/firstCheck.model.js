@@ -19,12 +19,12 @@ const FirstCheck = sequelize.define(
       allowNull: false,
     },
     weight: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     height: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

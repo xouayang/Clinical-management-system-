@@ -3,7 +3,7 @@ const Patients = require("../../model/patients.model");
 // reports Patients
 exports.reportsPatients = async (req, res) => {
   try {
-    const search_date = req.query;
+    const search_date = req.query.search_date;
     await Patients.findAll({ where: { createdAt: search_date } }).then(
       (data) => {
         if (!data) {
