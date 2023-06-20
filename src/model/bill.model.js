@@ -1,26 +1,22 @@
 const DataTypes = require("sequelize");
 const sequelize = require("../config/db.config");
 
-const Treats = sequelize.define(
-  "treats",
+const Bill = sequelize.define(
+  "bill",
   {
-    treat_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
-    firstCheck_id: {
-      type: DataTypes.UUID,
+    billNumber: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    disease_id: {
-      type: DataTypes.UUID,
+    totalPrice: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    details:{
-        type:DataTypes.STRING,
-        allowNull:false
     }
   },
   {
@@ -29,4 +25,4 @@ const Treats = sequelize.define(
   }
 );
 
-module.exports = Treats;
+module.exports = Bill;
