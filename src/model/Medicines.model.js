@@ -14,6 +14,10 @@ const Medicines = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    medicines_type_id:{
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
     amount: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -22,10 +26,21 @@ const Medicines = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    expired_date:{
+     type:DataTypes.DATE,
+     allowNull:true
+    },
+    createdAt : {
+      type:DataTypes.DATE,
+      defaultValue: sequelize.literal('NOW()'),
+    },
+    updatedAt:{
+      type:DataTypes.DATE,
+      defaultValue: sequelize.literal('NOW()'),
+    }
   },
   {
-    sequelize,
-    timestamps: true,
+    sequelize
   }
 );
 

@@ -22,7 +22,16 @@ try {
 // get all supplier
 exports.getAll = async (req, res) => {
   try {
-    await Patients.findAndCountAll().then((data) => {
+    await Patients.findAndCountAll({where:{status : 1}}).then((data) => {
+      return res.status(200).json(data);
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.getAll_byStatus = async (req, res) => {
+  try {
+    await Patients.findAndCountAll({where:{status : 0}}).then((data) => {
       return res.status(200).json(data);
     });
   } catch (error) {

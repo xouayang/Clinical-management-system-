@@ -25,7 +25,7 @@ const FirstCheck = sequelize.define(
     height: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
+    }
   },
   {
     sequelize,

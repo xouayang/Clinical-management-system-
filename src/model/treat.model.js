@@ -4,17 +4,17 @@ const sequelize = require("../config/db.config");
 const Treats = sequelize.define(
   "treats",
   {
-    treat_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
-    firstCheck_id: {
+    disease_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    disease_id: {
+    bill_id:{
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -25,7 +25,7 @@ const Treats = sequelize.define(
   },
   {
     sequelize,
-    timestamps: true,
+    timestamps:true
   }
 );
 

@@ -14,13 +14,21 @@ const Offer = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    TotalAmount: {
+    medicines_id:{
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    amount: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    TotalPrice:{
-        type: DataTypes.INTEGER,
+    name:{
+        type: DataTypes.STRING,
         allowNull: false,   
+    },
+    price:{
+      type: DataTypes.INTEGER,
+      allowNull: false, 
     }
   },
   {

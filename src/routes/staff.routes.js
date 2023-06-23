@@ -8,6 +8,8 @@ module.exports = (app) => {
     app.get("/get-staff/:id",controller.singleData)
     app.put("/update-staff/:id",controller.updateData)
     app.delete("/delete-staff/:id",controller.deleteData)
+    app.get("/statff-male",controller.genderMale)
+    app.get("/statff-Female",controller.genderFeMale)
     // app.post("/login",controller.signIn)
 
 }

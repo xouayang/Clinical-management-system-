@@ -30,6 +30,10 @@ const Patients = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    status:{
+      type:DataTypes.INTEGER,
+      defaultValue:1
+    }
   },
   {
     sequelize,

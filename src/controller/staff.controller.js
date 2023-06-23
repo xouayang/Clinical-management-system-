@@ -124,3 +124,28 @@ exports.deleteData = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get dat by gender 
+exports.genderMale = async (req, res) =>{
+  try {
+    await Staffs.findAndCountAll({where:{gender:'ຊາຍ'}}).then((data) => {
+      if(data.rows.length > 0) {
+        return res.status(200).json(data)
+      }
+      return res.status(400).json({message:"NOT FOUND DATA "})
+    })
+  } catch (error) {
+   console.log(error) 
+  }
+}
+exports.genderFeMale = async (req, res) =>{
+  try {
+    await Staffs.findAndCountAll({where:{gender:'ຍິງ'}}).then((data) => {
+      if(data.rows.length > 0) {
+        return res.status(200).json(data)
+      }
+      return res.status(400).json({message:"NOT FOUND DATA "})
+    })
+  } catch (error) {
+   console.log(error) 
+  }
+}

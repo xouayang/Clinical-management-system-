@@ -1,7 +1,6 @@
-const controller = require('../controller/bill.controller');
-const upload = require('../helper/upload')
+const controller = require('../controller/medicines.type.controller');
 module.exports = (app) => {
-    app.post("/create-bill",controller.create)
+    app.post("/medicins-type",controller.create)
     // app.get("/get-all",controller.getAll)
     // app.put("/update/:id",controller.updateData)
     // // app.delete("/delete/:id",controller.deleteData)

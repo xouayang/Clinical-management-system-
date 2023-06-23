@@ -19,6 +19,8 @@ require("./src/routes/disease.routes")(app);
 require("./src/routes/reports.routes")(app);
 require("./src/routes/treat.routes")(app);
 require("./src/routes/bill.routes")(app);
+require("./src/routes/midicines.routes")(app);
+require("./src/routes/medicines.type.routes")(app);
 pool
 // *** end ***
 const PORT = process.env.PORT
