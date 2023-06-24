@@ -2,9 +2,9 @@ const DataTypes = require("sequelize");
 const sequelize = require("../config/db.config");
 
 const SaleDetails = sequelize.define(
-  "saleDetails",
+  "sale_details",
   {
-    saleDetails_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
@@ -14,22 +14,25 @@ const SaleDetails = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    medicines_id: {
+    treat_id: {
       type: DataTypes.UUID,
       allowNull: false,
+    },
+    name:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    amount:{
+      type:DataTypes.INTEGER,
+      allowNull:false
     },
     price:{
         type:DataTypes.FLOAT,
         allowNull:false
-    },
-    total: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
+    }
   },
   {
-    sequelize,
-    timestamps: true,
+    sequelize
   }
 );
 

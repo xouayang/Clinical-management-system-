@@ -21,6 +21,7 @@ require("./src/routes/treat.routes")(app);
 require("./src/routes/bill.routes")(app);
 require("./src/routes/midicines.routes")(app);
 require("./src/routes/medicines.type.routes")(app);
+require("./src/routes/saleDetails.routes")(app);
 pool
 // *** end ***
 const PORT = process.env.PORT
