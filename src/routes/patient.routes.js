@@ -5,6 +5,7 @@ module.exports = (app) => {
     app.get("/get-status",controller.getAll_byStatus)
     app.delete("/delete-patients/:id",controller.deleteData)
     app.put("/update-patients/:id",controller.update_data)
+    app.get("/statusZero",controller.getStatusZero)
 
     // app.get("/patients",controller.getallData)
 

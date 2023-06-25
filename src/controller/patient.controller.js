@@ -29,6 +29,21 @@ exports.getAll = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get all where status = 0
+exports.getStatusZero = async (req, res) =>{
+  try {
+    await Patients.findAndCountAll({where:{status:0}}).then((data ) => {
+      if(data.rows.length > 0) {
+       return res.status(200).json(data)
+      } else {
+        return res.status(404).json({message:"NOT FOUND DATA"})
+      }
+    })
+    
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+}
 exports.getAll_byStatus = async (req, res) => {
   try {
     await Patients.findAndCountAll({where:{status : 0}}).then((data) => {

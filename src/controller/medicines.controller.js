@@ -77,3 +77,20 @@ exports.createOffer = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get medicines dat and medincines type 
+exports.getMedicinesType = async (req, res) => {
+  try {
+   const sql = `
+     select md.medicines_id, md.name,md.amount,mdt.unit,md.price,mdt.type_name from medicinestypes mdt 
+     inner join medicines md on mdt.id = md.medicines_type_id
+   ` 
+   const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+   if(data.length > 0) {
+     return res.status(200).json(data)
+   } else {
+    return res.status(400).json({message:"NOT FOUND DATA "})
+   }
+  } catch (error) {
+   return res.status(500).json({message:error.message}) 
+  }
+}
