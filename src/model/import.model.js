@@ -18,6 +18,10 @@ const Import = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    prescription_id:{
+      type: DataTypes.UUID,
+      allowNull: false, 
+    },
     bill_number: {
       type: DataTypes.STRING,
       allowNull: false,

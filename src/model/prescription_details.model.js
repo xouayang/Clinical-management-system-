@@ -41,6 +41,10 @@ const Prescription_deails = sequelize.define(
     bill_number: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    create_at:{
+      type:DataTypes.DATE,
+      defaultValue: sequelize.literal('NOW()'),
     }
   },
   {
