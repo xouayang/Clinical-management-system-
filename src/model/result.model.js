@@ -1,45 +1,40 @@
 const DataTypes = require("sequelize");
 const sequelize = require("../config/db.config");
 
-const Offer = sequelize.define(
-  "offer",
+const Result = sequelize.define(
+  "results",
   {
-    offer_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
       primaryKey: true,
     },
-    treat_id: {
+    staff_name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    firstcheck_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    medicines_id:{
+    bill_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    amount: {
-      type: DataTypes.INTEGER,
+    result: {
+      type: DataTypes.STRING,
       allowNull: false,
-    },
-    name:{
-        type: DataTypes.STRING,
-        allowNull: false,   
-    },
-    price:{
-      type: DataTypes.INTEGER,
-      allowNull: false, 
     },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: sequelize.literal("NOW()"),
-    }
+    },
   },
   {
     sequelize,
-    timestamps: true,
   }
 );
 
-module.exports = Offer;
+module.exports = Result;

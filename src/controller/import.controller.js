@@ -28,24 +28,26 @@ exports.createImport = async (req, res) => {
     const item = req.body.item;
     const staff_id = req.payload.ID;
     let result = [];
-    let id =''
-    let Status 
+    let id = "";
+    let Status;
     const data = {
       staff_id: staff_id,
       bill_number: item[0].bill_number,
       prescription_id: item[0].prescription_id,
     };
-    await Prescription.findAndCountAll().then((data) => {
-      if(data.rows) {
-        Status = data.rows[0].status  
-      }
-    })
-    if(Status == 0) {
-      return res.status(400).json({message:"ລະຫັດໃບບິນນີ້ໄດ້ນຳເຂົ້າກ່ອນໜ້ານີເເລ້ວ"}) 
-    }
+    // await Prescription.findAndCountAll().then((data) => {
+    //   if (data.rows) {
+    //     Status = data.rows[0].status;
+    //   }
+    // });
+    // if (Status == 0) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "ລະຫັດໃບບິນນີ້ໄດ້ນຳເຂົ້າກ່ອນໜ້ານີເເລ້ວ" });
+    // }
     await Import.create(data).then(async (success) => {
       if (success) {
-          id = success.prescription_id
+        id = success.prescription_id;
         for (let i = 0; i < item.length; i++) {
           await Medicines.increment("amount", {
             by: item[i].amount,
@@ -69,8 +71,27 @@ exports.createImport = async (req, res) => {
         }
       }
     });
-    await Prescription.update({status:0},{where:{id:id}})
+    await Prescription.update({ status: 0 }, { where: { id: id } });
     return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// get history of import
+exports.get_history_import = async (req, res) => {
+  try {
+    const sql = `
+     select its.bill_number,itd.type_name,itd.name as primacy_name,
+     itd.amount,itd.price,itd.unit,itd.expire_date, st.name from imports its 
+     inner join import_details itd on its.id = itd.import_id
+     inner join staffs st on its.staff_id = st.id 
+    `;
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    if (data.length > 0) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(200).json(data);
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

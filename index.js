@@ -24,6 +24,7 @@ require("./src/routes/medicines.type.routes")(app);
 require("./src/routes/saleDetails.routes")(app);
 require("./src/routes/prescription.routes")(app);
 require("./src/routes/import.routes")(app);
+require("./src/routes/result.routes")(app);
 pool
 // *** end ***
 const PORT = process.env.PORT

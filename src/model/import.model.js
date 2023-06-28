@@ -25,7 +25,12 @@ const Import = sequelize.define(
     bill_number: {
       type: DataTypes.STRING,
       allowNull: false,
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal("NOW()"),
+    },
   },
   {
     sequelize,

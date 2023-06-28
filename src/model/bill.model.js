@@ -22,11 +22,20 @@ const Bill = sequelize.define(
     total_price: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
+    status:{
+      type:DataTypes.INTEGER,
+      defaultValue:1,
+      allowNull:false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal("NOW()")
+    },
   },
   {
-    sequelize,
-    timestamps: true,
+    sequelize
   }
 );
 

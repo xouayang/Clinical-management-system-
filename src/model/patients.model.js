@@ -33,11 +33,15 @@ const Patients = sequelize.define(
     status:{
       type:DataTypes.INTEGER,
       defaultValue:1
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal("NOW()"),
+    },
   },
   {
-    sequelize,
-    timestamps: true,
+    sequelize
   }
 );
 

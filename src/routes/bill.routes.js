@@ -1,6 +1,7 @@
 const controller = require('../controller/bill.controller');
-const upload = require('../helper/upload')
 module.exports = (app) => {
     app.post("/create-bill",controller.create)
-
+    app.get("/get-bill",controller.dataBill)
+    app.get("/status-zero",controller.statusZero)
+    app.put("/update-bill/:id",controller.updatBill)
 }
