@@ -1,32 +1,22 @@
 const FirstCheck = require("../model/firstCheck.model");
-const Patients = require('../model/patients.model')
 exports.create = async (req, res) => {
   try {
-    // let status = 2
-    let id = ''
-    await FirstCheck.create({ ...req.body })
-      .then((data) => {
-        if (data) {
-          id = data.patients_id
-         return res.status(200).json(data)
-            }
-        return res.status(400).json({ message: "Some thing when wrong" });
-      })  
-      await Patients.update({status:0}, {where:{id:id}})
-      .catch((error) => {
-        return res.status(500).json({ message: error.message });
-      });
+    await FirstCheck.create({ ...req.body }).then((data) => {
+      if (data) {
+        return res.status(200).json(data);
+      }
+      return res.status(200).json(data);
+    });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: error.message });
   }
 };
 // get all data
 exports.getAll = async (req, res) => {
   try {
-    await FirstCheck.findAndCountAll().then((data) => {
+    await FirstCheck.findAndCountAll({where:{status:1}}).then((data) => {
       if (!data) {
-        return res.status(404).json({ message: "NOT FOUND DATA" });
+        return res.status(200).json(data);
       }
       return res.status(200).json(data);
     });

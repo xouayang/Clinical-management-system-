@@ -84,6 +84,7 @@ exports.getMedicinesType = async (req, res) => {
    const sql = `
      select md.medicines_id, md.name,md.amount,mdt.unit,md.price,mdt.type_name from medicinestypes mdt 
      inner join medicines md on mdt.id = md.medicines_type_id
+     order by md.amount ASC
    ` 
    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
    if(data.length > 0) {

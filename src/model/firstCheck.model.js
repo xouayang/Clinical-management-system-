@@ -10,8 +10,16 @@ const FirstCheck = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    patients_id: {
-      type: DataTypes.UUID,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    tel: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     details: {
@@ -25,11 +33,23 @@ const FirstCheck = sequelize.define(
     height: {
       type: DataTypes.STRING,
       allowNull: true,
-    }
+    },
+    chip_life: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: sequelize.literal("NOW()"),
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      defaultValue:1
+    },
   },
   {
     sequelize,
-    timestamps: true,
   }
 );
 

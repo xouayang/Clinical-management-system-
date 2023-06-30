@@ -2,9 +2,11 @@ const Bill = require("../model/bill.model");
 const { billNumber } = require("../helper/randonBill");
 const sequelize = require("../config/db.config");
 const { QueryTypes } = require("sequelize");
+const FirstCheck = require('../model/firstCheck.model')
 exports.create = async (req, res) => {
   const bill_number = billNumber();
   try {
+    let id;
     const data = {
       firstcheck_id: req.body.firstcheck_id,
       bill_number: bill_number,
@@ -12,9 +14,11 @@ exports.create = async (req, res) => {
     };
     await Bill.create(data).then((success) => {
       if (success) {
-        return res.status(201).json(success);
+        id = success.firstcheck_id
+        return res.status(201).json(success);  
       }
     });
+    await FirstCheck.update({status:0}, {where:{id:id}})
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

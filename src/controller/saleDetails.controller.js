@@ -1,5 +1,4 @@
 const saleDetails = require("../model/saleDetails.model");
-const sale = require("../model/sale.model");
 const Offer = require("../model/offer.model");
 // create sale data
 exports.createSaleDetails = async (req, res) => {
