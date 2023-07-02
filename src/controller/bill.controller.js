@@ -36,7 +36,7 @@ exports.getAll = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-// get data in bill
+// get data in bill and status 1
 exports.dataBill = async (req, res) => {
   try {
     const sql = `
@@ -55,6 +55,7 @@ exports.dataBill = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get status 0
 exports.statusZero = async (req, res) => {
    try {
      const sql = `

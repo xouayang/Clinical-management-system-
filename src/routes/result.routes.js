@@ -5,4 +5,6 @@ module.exports = (app) => {
     app.get("/get-result",controller.get_all_result)
     app.get("/get-result/:id",controller.get_data_by_id)
     app.get("/dataResult",controller.dataResult)
+    app.get("/history-result",controller.get_history_result)
+    
 }

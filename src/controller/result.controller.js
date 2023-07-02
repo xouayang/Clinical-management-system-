@@ -18,7 +18,7 @@ exports.create_result = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-// get all result
+// get all result and status 2 
 exports.get_all_result = async (req, res) => {
   try {
     const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
@@ -97,3 +97,23 @@ exports.dataResult = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get history of result status 3
+exports.get_history_result = async (req, res) => {
+  try {
+    const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
+      bl.total_price,rs.result,bl.created_at from bills bl 
+      inner join treats tr on bl.id = tr.bill_id
+      inner join firstchecks ft on bl.firstcheck_id = ft.id
+      inner join results rs on bl.id = rs.bill_id
+      where bl.status = 3 order by bl.created_at ASC`;
+
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    if(data) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(200).json(data)
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}

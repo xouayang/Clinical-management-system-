@@ -1,6 +1,8 @@
 const Medicines = require("../model/Medicines.model");
 const MedicinesType = require("../model/medicines.type");
 const Offer = require("../model/offer.model");
+const Bill = require('../model/bill.model')
+const {billNumber} = require('../helper/randonBill')
 const sequelize = require("../config/db.config");
 const { QueryTypes } = require("sequelize");
 exports.create = async (req, res) => {
@@ -34,9 +36,10 @@ exports.getBy_id = async (req, res) => {
   try {
     const { id } = req.params;
     const sql = `
-      select * from medicines
-      where medicines_type_id = '${id}'
-    `;
+     select md.medicines_id,md.name,md.price,md.amount, mdt.type_name,mdt.unit from medicines md 
+     inner join medicinestypes mdt on md.medicines_type_id = mdt.id
+     where md.medicines_type_id = '${id}'
+    `
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
     return res.status(200).json(data);
   } catch (error) {
@@ -45,7 +48,9 @@ exports.getBy_id = async (req, res) => {
 };
 // create order
 exports.createOffer = async (req, res) => {
+  const bill_number = billNumber()
   try {
+    let id = ''
     const item = req.body.item;
     const treat_id = req.body.treat_id;
     let result = [];
@@ -62,9 +67,11 @@ exports.createOffer = async (req, res) => {
         amount: item[i].amount,
         name: item[i].name,
         price: item[i].price,
+        bill_number:bill_number
       })
         .then((data) => {
           if (data) {
+            id = data.treat_id;
             result.push(data);
           }
         })
@@ -72,6 +79,7 @@ exports.createOffer = async (req, res) => {
           console.log(error);
         });
     }
+    await Bill.update({status:3}, {where:{id:id}})
     return res.status(200).json(result);
   } catch (error) {
     console.log(error)
