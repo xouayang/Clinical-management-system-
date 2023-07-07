@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          return res.status(404).json({message:err.message})
         });
     }
     return res.status(200).json(datas);
@@ -33,7 +33,7 @@ exports.getToBill = async (req, res) => {
     const result = [];
     let sameData;
     const sql = `
-    select DISTINCT bl.id,ft.id as first_id,ds.disease_id,ds.price,ts.details,
+    select DISTINCT bl.id,ft.id as first_id,ft.create_at,ds.disease_id,ds.price,ts.details,
     ts."createdAt" as date, bl.total_price,bl.bill_number,ft.name,ft.address,
     ft.tel from treats ts
     inner join bills bl on ts.bill_id = bl.id
@@ -56,6 +56,7 @@ exports.getToBill = async (req, res) => {
         tel: data[0].tel,
         bill_number: data[0].bill_number,
         total_price: data[0].total_price,
+        create_at: data[0].create_at,
       };
       result.push(data1);
       sameData = rows;
@@ -69,6 +70,7 @@ exports.getToBill = async (req, res) => {
       tel: sameData.tel,
       billNumber: sameData.bill_number,
       total_price: sameData.total_price,
+      create_at: sameData.create_at,
       rows: result,
     });
   } catch (error) {

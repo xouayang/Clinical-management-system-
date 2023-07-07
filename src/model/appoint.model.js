@@ -14,8 +14,8 @@ const Appoint = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    noffAppoint:{
-        type:DataTypes.STRING,
+    date:{
+        type:DataTypes.DATE,
         allowNull:false
     }
   },

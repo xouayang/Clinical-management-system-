@@ -5,4 +5,5 @@ module.exports = (app) => {
     app.get("/get-id/:id",controller.getBy_id)
     app.post("/createOffer",controller.createOffer)
     app.get("/getMedicines",controller.getMedicinesType)
+    app.get("/report-medicines",controller.reportData)
 }

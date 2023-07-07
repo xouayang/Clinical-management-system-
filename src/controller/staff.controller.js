@@ -5,7 +5,7 @@ const {randomStaffId} = require('../helper/ramdon')
 exports.create = async (req, res) => {
   try {
     const randomID = randomStaffId()
-    const {employee_id,name, gender, tel, password, address, position, role } = req.body;
+    const {name, gender, tel, password, address, position, role } = req.body;
     if (!name || !gender || !tel || !password || !address || !position) {
       return res.status(400).json({ message: "the body is not empty" });
     }

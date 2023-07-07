@@ -101,7 +101,7 @@ exports.dataResult = async (req, res) => {
 exports.get_history_result = async (req, res) => {
   try {
     const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
-      bl.total_price,rs.result,bl.created_at from bills bl 
+     ft.tel, bl.total_price,rs.result,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id
       inner join results rs on bl.id = rs.bill_id
