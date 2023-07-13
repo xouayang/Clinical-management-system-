@@ -22,6 +22,14 @@ const Result = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    details:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    price:{
+    type:DataTypes.INTEGER,
+    allowNull:false
+    },
     result: {
       type: DataTypes.STRING,
       allowNull: false,

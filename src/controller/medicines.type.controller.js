@@ -40,7 +40,7 @@ exports.deleteData = async (req, res) => {
     const { id } = req.params;
     await Medicines_Type.destroy({ where: { id: id } }).then((deleted) => {
       if (deleted) {
-        return res.json({ message: "Updated" });
+        return res.json({ message: "deleted" });
       } else {
         return res.status(400).json({ message: "error" });
       }

@@ -7,6 +7,7 @@ const sequelize = require("../config/db.config");
 const { QueryTypes } = require("sequelize");
 exports.create = async (req, res) => {
   try {
+    console.log(req.body);
     await Medicines.create({ ...req.body }).then((data) => {
       if (data) {
         res.json(data);
@@ -21,15 +22,12 @@ exports.create = async (req, res) => {
 // get all data
 exports.getAll = async (req, res) => {
   try {
-    await MedicinesType.findAll()
-      .then((data) => {
-        if (data.length > 0) {
-          return res.status(200).json(data);
-        }
-      })
-      .catch((error) => {
-        return res.status(404).json({ message: error.message });
-      });
+    const sql = `
+     select md.medicines_id,md.name,md.price,md.amount,md.expired_date,md."createdAt" as date, mdt.type_name,mdt.unit from medicines md 
+     inner join medicinestypes mdt on md.medicines_type_id = mdt.id
+    `;
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -114,10 +112,10 @@ exports.reportData = async (req, res) => {
      inner join medicinestypes mdt on md.medicines_type_id = mdt.id
     `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
-    if(data) {
-      return res.status(200).json(data)
+    if (data) {
+      return res.status(200).json(data);
     } else {
-      return res.status(200).json(data)
+      return res.status(200).json(data);
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });

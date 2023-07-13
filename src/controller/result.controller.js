@@ -5,35 +5,88 @@ const { QueryTypes } = require("sequelize");
 exports.create_result = async (req, res) => {
   try {
     const staff_name = req.payload.NAME;
-    await Result.create({ ...req.body, staff_name: staff_name }).then(
-      async (created) => {
-        if (created) {
-          await Bill.update({ status: 2 }, { where: { id: created.bill_id } });
-        } else {
-          return res.status(400).json({ message: "Failed" });
-        }
-      }
-    );
+    const { firstcheck_id, bill_id } = req.body;
+    const item = req.body.item;
+    let result = [];
+    for (let i = 0; i < item.length; i++) {
+      await Result.create({
+        staff_name: staff_name,
+        firstcheck_id: firstcheck_id,
+        bill_id: bill_id,
+        name: item[i].name,
+        details: item[i].details,
+        price: item[i].price,
+        result: item[i].results,
+      })
+        .then((data) => {
+          result.push(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+    await Bill.update({ status: 2 }, { where: { id: bill_id } });
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-// get all result and status 2 
+// get only bill data
+exports.get_only_bill = async (req, res) => {
+  try {
+    const sql = `select DISTINCT bl.id as bill_id,ft.name,bl.bill_number,bl.status,ft.details,
+      bl.total_price,bl.created_at from bills bl 
+      inner join treats tr on bl.id = tr.bill_id
+      inner join firstchecks ft on bl.firstcheck_id = ft.id
+      where bl.status = 2 order by bl.created_at ASC`;
+
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT })
+    return res.json(data)
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// get all result and status 2
 exports.get_all_result = async (req, res) => {
   try {
-    const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
-      bl.total_price,rs.result,bl.created_at from bills bl 
+    const {id} = req.params;
+    let result = [];
+    let sameData;
+    const sql = `select DISTINCT bl.id as bill_id,ft.name,bl.bill_number,bl.status,ft.details,
+      bl.total_price,rs.result,rs.details as result_details,rs.price,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id
       inner join results rs on bl.id = rs.bill_id
-      where bl.status = 2 order by bl.created_at ASC`;
+      where bl.id = '${id}' and bl.status = 2 order by bl.created_at ASC`;
 
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
-    if(data) {
-      return res.status(200).json(data);
-    } else {
-      return res.status(200).json(data)
+    if (data.length > 0) {
+      for (let i = 0; i < data.length; i++) {
+        const data1 = {
+          result: data[i].result,
+          result_details: data[i].result_details,
+          price: data[i].price,
+        };
+        const rows = {
+          bill_id: data[i].bill_id,
+          name: data[0].name,
+          bill_number: data[0].bill_number,
+          details: data[0].details,
+          total_price: data[0].total_price,
+        };
+        result.push(data1);
+        sameData = rows;
+      }
     }
+    return res.status(200).json({
+      bill_id:sameData.bill_id,
+      name:sameData.name,
+      bill_number:sameData.bill_number,
+      details:sameData.details,
+      total_price:sameData.total_price,
+      rows: result,
+    });
+    // return res.json(data)
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -101,19 +154,18 @@ exports.dataResult = async (req, res) => {
 exports.get_history_result = async (req, res) => {
   try {
     const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
-     ft.tel, bl.total_price,rs.result,bl.created_at from bills bl 
+     ft.tel, bl.total_price,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id
-      inner join results rs on bl.id = rs.bill_id
       where bl.status = 3 order by bl.created_at ASC`;
 
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
-    if(data) {
+    if (data) {
       return res.status(200).json(data);
     } else {
-      return res.status(200).json(data)
+      return res.status(200).json(data);
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};
