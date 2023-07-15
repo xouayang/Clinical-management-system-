@@ -10,18 +10,21 @@ const Appoint = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    treat_id: {
-      type: DataTypes.UUID,
+    name: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    date:{
-        type:DataTypes.DATE,
+    tel:{
+        type:DataTypes.STRING,
         allowNull:false
+    },
+    appoints:{
+      type:DataTypes.STRING,
+      allowNull:false
     }
   },
   {
-    sequelize,
-    timestamps: true,
+    sequelize
   }
 );
 

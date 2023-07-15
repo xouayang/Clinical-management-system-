@@ -131,7 +131,7 @@ exports.genderMale = async (req, res) =>{
       if(data.rows.length > 0) {
         return res.status(200).json(data)
       }
-      return res.status(400).json({message:"NOT FOUND DATA "})
+      return res.status(200).json(data)
     })
   } catch (error) {
    console.log(error) 
@@ -143,7 +143,7 @@ exports.genderFeMale = async (req, res) =>{
       if(data.rows.length > 0) {
         return res.status(200).json(data)
       }
-      return res.status(400).json({message:"NOT FOUND DATA "})
+      return res.status(200).json(data)
     })
   } catch (error) {
    console.log(error) 

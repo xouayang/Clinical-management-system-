@@ -1,5 +1,7 @@
 const Result = require("../model/result.model");
 const Bill = require("../model/bill.model");
+const SaleDetails = require('../model/saleDetails.model')
+const perScripttionDetails = require('../model/prescription_details.model')
 const sequelize = require("../config/db.config");
 const { QueryTypes } = require("sequelize");
 exports.create_result = async (req, res) => {
@@ -169,3 +171,54 @@ exports.get_history_result = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// get all price 
+exports.all_price = async (req, res) => {
+  try {
+    let sum;
+    let sum1;
+    await Result.findAll().then((data) => {
+      let total_price = 0;
+      for (let i = 0; i < data.length; i++) {
+        total_price = total_price + data[i].price 
+      }
+       sum = total_price
+    }).catch(() => {
+      return res.status(200).json("NOT FOUND DATA")
+    })
+    await SaleDetails.findAll().then((data) => {
+      let total = 0
+      for (let i = 0; i < data.length; i++) {
+           const item = data[i];
+           const itemTotal = item.amount * item.price;
+           total += itemTotal
+      }
+       sum1 = total
+    }).catch((error) => {
+      return res.status(200).json({message:error.message})
+    })
+     const All_suum = sum + sum1
+     return res.status(200).json({total_income:All_suum})
+  } catch (error) {
+   return res.status(500).json({message:error.message}) 
+  }
+};
+// out come
+exports.outCome = async (req, res) => {
+  try {
+    let sumOutcome ;
+    await perScripttionDetails.findAll().then((data) => {
+      let outcome = 0;
+      for (let i = 0; i < data.length; i++) {
+           const item = data[i];
+           const itemTotal = item.amount * item.price;
+           outcome += itemTotal
+      }
+      sumOutcome = outcome
+    }).catch((error) => {
+      return res.status(200).json({message:error.message})
+    })
+    return res.status(200).json({outcome:sumOutcome})
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+}
