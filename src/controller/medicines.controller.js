@@ -7,7 +7,6 @@ const sequelize = require("../config/db.config");
 const { QueryTypes } = require("sequelize");
 exports.create = async (req, res) => {
   try {
-    console.log(req.body);
     await Medicines.create({ ...req.body }).then((data) => {
       if (data) {
         res.json(data);
@@ -19,11 +18,41 @@ exports.create = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+// delete data 
+ exports.deleteData = async (req, res) => {
+  try {
+    const {id} = req.params;
+    await Medicines.destroy({where:{medicines_id:id}}).then((success) => {
+      if(success) {
+        return res.status(200).json({message:"Deleted"})
+      }
+    }).catch((error) => {
+      return res.status(200).json({message:error.message})
+    })
+  } catch (error) {
+   return res.status(500).json({message:error.message}) 
+  }
+ }
+ // update data
+ exports.updateData = async (req, res) => {
+  try {
+    const {id} = req.params;
+    await Medicines.update({...req.body},{where:{medicines_id:id}}).then((success) => {
+      if(success) {
+        return res.status(200).json({message:"Updated"})
+      }
+    }).catch((error) => {
+      return res.status(200).json({message:error.message})
+    })
+  } catch (error) {
+    return res.status(500).json({message:error.message}) 
+  }
+ }
 // get all data
 exports.getAll = async (req, res) => {
   try {
     const sql = `
-     select md.medicines_id,md.medicines_type_id as id,md.name,md.price,md.amount,md.expired_date,md."createdAt" as date, mdt.type_name,mdt.unit from medicines md 
+     select md.medicines_id,md.image,md.medicines_type_id as id,md.name,md.price,md.amount,md.expired_date,md."createdAt" as date, mdt.type_name,mdt.unit from medicines md 
      inner join medicinestypes mdt on md.medicines_type_id = mdt.id
     `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -36,7 +65,7 @@ exports.getBy_id = async (req, res) => {
   try {
     const { id } = req.params;
     const sql = `
-     select md.medicines_id,md.name,md.price,md.amount, mdt.type_name,mdt.unit from medicines md 
+     select md.medicines_id,md.image,md.name,md.price,md.amount, mdt.type_name,mdt.unit from medicines md 
      inner join medicinestypes mdt on md.medicines_type_id = mdt.id
      where md.medicines_type_id = '${id}'
     `;
@@ -90,7 +119,7 @@ exports.createOffer = async (req, res) => {
 exports.getMedicinesType = async (req, res) => {
   try {
     const sql = `
-     select md.medicines_id, md.name,md.amount,mdt.unit,md.price,mdt.type_name from medicinestypes mdt 
+     select md.medicines_id,md.image, md.name,md.amount,mdt.unit,md.price,mdt.type_name from medicinestypes mdt 
      inner join medicines md on mdt.id = md.medicines_type_id
      order by md.amount ASC
    `;
@@ -108,7 +137,7 @@ exports.getMedicinesType = async (req, res) => {
 exports.reportData = async (req, res) => {
   try {
     const sql = `
-     select md.medicines_id,md.name,md.price,md.amount, mdt.type_name,mdt.unit from medicines md 
+     select md.medicines_id,md.image,md.name,md.price,md.amount, mdt.type_name,mdt.unit from medicines md 
      inner join medicinestypes mdt on md.medicines_type_id = mdt.id
     `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });

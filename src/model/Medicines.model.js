@@ -26,6 +26,10 @@ const Medicines = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    image:{
+      type:DataTypes.STRING,
+      allowNull:true
+    },
     expired_date:{
      type:DataTypes.DATE,
      allowNull:true

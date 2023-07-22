@@ -1,22 +1,28 @@
-const multer = require('multer')
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, './public/images')
-    },
-    filename: (req, file, cb) => {
-        cb(null, 'file-' + Date.now() + '.' +
-        file.originalname.split('.')[file.originalname.split('.').length-1])
+const multer = require('multer');
+const firebase = require('firebase/app');
+const {getStorage,ref,getDownloadURL,uploadBytesResumable} = require('firebase/storage');
+const firebaseConfigs = require('../firebase/firebase.config.json');
+const router = require('express').Router();
+const upload = multer({
+    storage:multer.memoryStorage()
+});
+firebase.initializeApp(firebaseConfigs);
+const storage = getStorage();
+router.post('/image',upload.single('file') , async (req, res) => {
+    try {
+     const folder = 'medicines';
+     const fileName = `${folder}/${req.file.originalname}`;
+     const storageRef = ref(storage,fileName);
+     const metadata = {
+     contentType:req.file.mimetype
+     } 
+     const snapshot = uploadBytesResumable(storageRef,req.file.buffer, metadata)  ;
+     const downloadURL = await getDownloadURL((await snapshot).ref);
+
+     return res.status(201).json({url:downloadURL})
+    } catch (error) {
+     return res.status(500).json({message:error.message})   
     }
-})
-const fileFilter = (req, file, cb) => {
-    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg' || file.mimetype === 'image/webp'){
-        cb(null, true)
-    } else {
-        cb(null, false)
-    }
-};
+});
 
-
-let upload = multer({ storage:storage, fileFilter:fileFilter });
-
-module.exports = upload;
+module.exports = router

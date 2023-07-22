@@ -6,4 +6,5 @@ module.exports = (app) => {
     app.post("/createOffer",controller.createOffer)
     app.get("/getMedicines",controller.getMedicinesType)
     app.get("/report-medicines",controller.reportData)
+    app.delete("/delete-medicines-data/:id",controller.deleteData)
 }

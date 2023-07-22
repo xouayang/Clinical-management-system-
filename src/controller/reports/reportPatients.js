@@ -30,3 +30,11 @@ exports.reportAll = async (req, res) => {
      return res.status(500).json({message:error.message})   
     }
 }
+// report income 
+exports.income = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    return res.status(500).json({message:error.message})     
+  }
+}
