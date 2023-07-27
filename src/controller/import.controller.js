@@ -56,11 +56,13 @@ exports.createImport = async (req, res) => {
             price: item[i].price,
             type_name: item[i].type_name,
             unit: item[i].unit,
-          }).then((data) => {
-            result.push(data);
-          }).catch((error) => {
-             console.log(error)
           })
+            .then((data) => {
+              result.push(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
       }
     });
@@ -88,4 +90,42 @@ exports.get_history_import = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
+};
+exports.get_history_import_status = async (req, res) => {
+  try {
+    const sql = `
+     select pt.bill_number  from prescriptions pt
+     where pt.status = 1
+   `;
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    if (data.length > 0) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(200).json(data);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// get by id
+exports.get_by_id = async (res, req) => {
+  try {
+    const { bill_number } = req.params;
+    // where its.bill_number= '${bill_number}'
+    const sql = `
+     select * from imports
+    `;
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT })
+    .then((data) => {
+      return res.status(200).json(data)
+    }).catch((error) => {
+      console.log(error)
+      return res.status(200).json({message:error.message})
+    })
+    // if (data.length > 0) {
+    //   return res.status(200).json(data);
+    // } else {
+    //   return res.status(200).json("error");
+    // }
+  } catch (error) {}
 };

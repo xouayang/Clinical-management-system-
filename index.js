@@ -28,6 +28,7 @@ require("./src/routes/prescription.routes")(app);
 require("./src/routes/import.routes")(app);
 require("./src/routes/result.routes")(app);
 require("./src/routes/appoint.routes")(app);
+require("./src/routes/standare.routes")(app);
 pool
 // *** end ***
 const PORT = process.env.PORT

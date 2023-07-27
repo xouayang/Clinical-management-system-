@@ -66,7 +66,7 @@ exports.getOffer = async (req, res) => {
 exports.get_of_list_order_medicines = async (req, res) => {
   try {
     const sql = `
-    select of.offer_id,of.bill_number,of.treat_id,of.status,mdt.type_name,of.name,of.amount,
+    select DISTINCT  of.offer_id,of.bill_number,of.treat_id,of.status,mdt.type_name,of.name,of.amount,
     of.price,mdt.unit,of.created_at from offers of
     inner join medicines md on of.medicines_id = md.medicines_id 
     inner join medicinestypes mdt on md.medicines_type_id = mdt.id
