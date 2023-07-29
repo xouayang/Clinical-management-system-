@@ -54,7 +54,7 @@ exports.get_all_result = async (req, res) => {
     const {id} = req.params;
     let result = [];
     let sameData;
-    const sql = `select DISTINCT bl.id as bill_id,ft.name,bl.bill_number,bl.status,ft.details,
+    const sql = `select DISTINCT bl.id as bill_id,ft.name,ft.address,ft.tel,bl.bill_number,bl.status,ft.details,
       bl.total_price,rs.result,rs.details as result_details,rs.price,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id
@@ -74,6 +74,8 @@ exports.get_all_result = async (req, res) => {
           name: data[0].name,
           bill_number: data[0].bill_number,
           details: data[0].details,
+          address: data[0].address,
+          tel: data[0].tel,
           total_price: data[0].total_price,
         };
         result.push(data1);
@@ -86,6 +88,8 @@ exports.get_all_result = async (req, res) => {
       bill_number:sameData.bill_number,
       details:sameData.details,
       total_price:sameData.total_price,
+      address:sameData.address,
+      tel:sameData.tel,
       rows: result,
     });
     // return res.json(data)

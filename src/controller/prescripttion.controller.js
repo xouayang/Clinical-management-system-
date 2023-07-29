@@ -49,7 +49,7 @@ exports.get_history_prescription = async (req, res) => {
     inner join suppliers sp on pt.supplier_id = sp.id
     inner join staffs st on pt.staff_id = st.id
     inner join prescription_details pdt on pt.id = pdt.prescription_id
-    order by pdt.create_at ASC
+    order by pdt.create_at DESC
  `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
     if (data.length > 0) {
