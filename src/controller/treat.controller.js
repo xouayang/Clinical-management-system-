@@ -1,6 +1,7 @@
 const Treat = require("../model/treat.model");
 const { QueryTypes } = require("sequelize");
 const sequelize = require("../config/db.config");
+const moment = require("moment");
 exports.create = async (req, res) => {
   try {
     const item = req.body.item;
@@ -18,7 +19,7 @@ exports.create = async (req, res) => {
           }
         })
         .catch((err) => {
-          return res.status(404).json({message:err.message})
+          return res.status(404).json({ message: err.message });
         });
     }
     return res.status(200).json(datas);
@@ -72,6 +73,41 @@ exports.getToBill = async (req, res) => {
       total_price: sameData.total_price,
       create_at: sameData.create_at,
       rows: result,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// get report treats
+exports.report_treats = async (req, res) => {
+  try {
+    const startDate = req.query.start;
+    const endDate = req.query.end;
+    let formattedStartDate = moment(startDate).format("YYYY-MM-DD");
+    let formattedEndDate = moment(endDate).add(1, "days").format("YYYY-MM-DD");
+    let con = "";
+    if (startDate && endDate) {
+      con +=
+        " DATE(ft.create_at) BETWEEN '" +
+        formattedStartDate +
+        "' AND '" +
+        formattedEndDate +
+        "' ";
+    }
+    const sql = `
+    select ft.name,ft.address,ft.tel,ft.create_at,ds.name as disase_name,ds.price from firstchecks ft 
+    inner join bills bl on ft.id = bl.firstcheck_id
+    inner join treats tr on bl.id = tr.bill_id
+    inner join diseases ds on tr.disease_id = ds.disease_id
+    where ${con}`;
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    let total = 0;
+      data.forEach(item => {
+        total += item.price; 
+      });
+    return res.status(200).json({
+      total_price:total,
+      rows:data
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -2,7 +2,7 @@ const PrescriptionDeails = require("../model/prescription_details.model");
 const Prescription = require("../model/prescription.model");
 const { billNumber } = require("../helper/randonBill");
 const sequelize = require("../config/db.config");
-const { QueryTypes,Op } = require("sequelize");
+const { QueryTypes, Op } = require("sequelize");
 const moment = require("moment");
 const Sale_details = require("../model/saleDetails.model");
 // create data
@@ -53,7 +53,7 @@ exports.get_history_prescription = async (req, res) => {
  `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
     if (data.length > 0) {
-      return res.status(200).json(data)
+      return res.status(200).json(data);
     } else {
       return res.status(200).json(data);
     }
@@ -62,9 +62,9 @@ exports.get_history_prescription = async (req, res) => {
   }
 };
 // get by bill_number
-exports.get_by_bill_number  = async (req, res) => {
+exports.get_by_bill_number = async (req, res) => {
   try {
-    const {bill_number} = req.params;
+    const { bill_number } = req.params;
     let rows = [];
     let result;
     let sum = 0;
@@ -80,44 +80,45 @@ exports.get_by_bill_number  = async (req, res) => {
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
     if (data.length > 0) {
       for (let i = 0; i < data.length; i++) {
-       const dataInside = {
-        type_name:data[i].type_name,
-        name:data[i].name,
-        amount:data[i].amount,
-        price:data[i].price,
-        create_at:data[i].create_at
-       }
-       const outsideData = {
-        bill_number:data[i].bill_number,
-        supplier_name:data[i].supplier_name,
-        staff_name:data[i].staff_name,
-       }
-       const item = data[i];
-       const total_price = item.amount * item.price;
-       sum += total_price
+        const dataInside = {
+          type_name: data[i].type_name,
+          name: data[i].name,
+          amount: data[i].amount,
+          price: data[i].price,
+          create_at: data[i].create_at,
+        };
+        const outsideData = {
+          bill_number: data[i].bill_number,
+          supplier_name: data[i].supplier_name,
+          staff_name: data[i].staff_name,
+        };
+        const item = data[i];
+        const total_price = item.amount * item.price;
+        sum += total_price;
         rows.push(dataInside);
-        result = outsideData
+        result = outsideData;
       }
       return res.status(200).json({
-        bill_number:result.bill_number,
-        supplier_name:result.supplier_name,
-        staff_name:result.staff_name,
-        sum:sum,
-        rows:rows
-      })
+        bill_number: result.bill_number,
+        supplier_name: result.supplier_name,
+        staff_name: result.staff_name,
+        sum: sum,
+        rows: rows,
+      });
     } else {
       return res.status(200).json(data);
     }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};
 // report outcome
 exports.outcome = async (req, res) => {
   try {
     const startDate = req.query.start;
     const endDate = req.query.end;
     let result = [];
+    let blank = [];
     let sum = 0;
     let formattedStartDate = moment(startDate).format("YYYY-MM-DD");
     let formattedEndDate = moment(endDate).add(1, "days").format("YYYY-MM-DD");
@@ -130,7 +131,9 @@ exports.outcome = async (req, res) => {
         formattedEndDate +
         "' ";
     }
-
+    if (startDate === null || endDate === null) {
+      return res.status(200).json(blank);
+    }
     const sql =
       `select prd.name,prd.type_name, prd.amount,prd.price, prd.create_at from prescriptions pr 
       inner join prescription_details prd on pr.id = prd.prescription_id
@@ -179,25 +182,27 @@ exports.income = async (req, res) => {
       where: {
         createdAt: { [Op.between]: [formattedStartDate, formattedEndDate] },
       },
-    }).then((data) => {
-      if(data.length>0) {
-       for (let i = 0; i < data.length; i++) {
-        const insideData = {
-          name:data[i].name,
-          amount:data[i].amount,
-          price:data[i].price,
-          createdAt:data[i].createdAt
-        }
-        const item = data[i];
-        const itemTotal = item.amount * item.price;
-        sum += itemTotal;
-        result.push(insideData)
-       }  
-      }
-      return res.status(200).json({sum:sum,rows:result})
-    }).catch((error) => {
-      return res.status(200).json({message:error.message})
     })
+      .then((data) => {
+        if (data.length > 0) {
+          for (let i = 0; i < data.length; i++) {
+            const insideData = {
+              name: data[i].name,
+              amount: data[i].amount,
+              price: data[i].price,
+              createdAt: data[i].createdAt,
+            };
+            const item = data[i];
+            const itemTotal = item.amount * item.price;
+            sum += itemTotal;
+            result.push(insideData);
+          }
+        }
+        return res.status(200).json({ sum: sum, rows: result });
+      })
+      .catch((error) => {
+        return res.status(200).json({ message: error.message });
+      });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -215,7 +220,7 @@ exports.get_history_prescription_status = async (req, res) => {
  `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
     if (data.length > 0) {
-      return res.status(200).json(data)
+      return res.status(200).json(data);
     } else {
       return res.status(200).json(data);
     }
