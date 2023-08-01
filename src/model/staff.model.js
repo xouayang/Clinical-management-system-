@@ -39,7 +39,7 @@ const Staff = sequelize.define(
       allowNull: false,
     },
     role:{
-      type: DataTypes.ENUM('user', 'staff', 'doctor', 'admin'),
+      type: DataTypes.ENUM('statff_medicines', 'staff', 'doctor', 'admin','financial'),
       allowNull: true,
     }
   },
