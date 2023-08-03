@@ -1,6 +1,7 @@
 const FirstCheck = require("../model/firstCheck.model");
 const sequelize = require("../config/db.config");
-const { QueryTypes } = require("sequelize");
+const { QueryTypes,Op} = require("sequelize");
+const moment = require('moment')
 exports.create = async (req, res) => {
   try {
     if (!req.body) {
@@ -25,6 +26,21 @@ exports.getAll = async (req, res) => {
       }
       return res.status(200).json(data);
     });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// only today
+exports.getAll_only_today = async (req, res) => {
+  try {
+      await FirstCheck.findAll({where:{create_at:{
+        [Op.gte]: moment().startOf('day').toDate(),
+        [Op.lt]: moment().endOf('day').toDate()
+      }}}).then((data) => {
+        return res.status(200).json(data)
+      }).catch(() => {
+        return res.status(200).json(data)
+      })
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -63,7 +79,7 @@ exports.deleteData = async (req, res) => {
     if (deleteData) {
       return res.status(200).json({ message: "Deleted" });
     }
-    return res.status(404).json({ message: "NOT FOUND DATA" });
+    return res.status(200).json({ message: "NOT FOUND DATA" });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -77,7 +93,7 @@ exports.updateData = async (req, res) => {
       { where: { id: id } }
     );
     if (!updateData) {
-      return res.status(404).json({ message: "NOT FOUND DATA" });
+      return res.status(200).json({ message: "NOT FOUND DATA" });
     }
     return res.status(200).json({ message: "Updated" });
   } catch (error) {

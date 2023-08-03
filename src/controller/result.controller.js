@@ -163,6 +163,24 @@ exports.get_history_result = async (req, res) => {
      ft.tel, bl.total_price,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id
+      where bl.status = 3 order by bl.created_at DESC LIMIT 10`;
+
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    if (data) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(200).json(data);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+exports.get_history_result1 = async (req, res) => {
+  try {
+    const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
+     ft.tel, bl.total_price,bl.created_at from bills bl 
+      inner join treats tr on bl.id = tr.bill_id
+      inner join firstchecks ft on bl.firstcheck_id = ft.id
       where bl.status = 3 order by bl.created_at ASC`;
 
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });

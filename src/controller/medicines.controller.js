@@ -52,7 +52,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const sql = `
-     select md.medicines_id,md.image,md.medicines_type_id as id,md.name,md.price,md.amount,md.expired_date,md."createdAt" as date, mdt.type_name,mdt.unit from medicines md 
+     select md.medicines_id,mdt.id,md.image,md.name,md.price,md.amount,md.expired_date,md."createdAt" as date, mdt.type_name,mdt.unit from medicines md 
      inner join medicinestypes mdt on md.medicines_type_id = mdt.id
     `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
