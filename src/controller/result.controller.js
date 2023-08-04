@@ -177,7 +177,7 @@ exports.get_history_result = async (req, res) => {
 };
 exports.get_history_result1 = async (req, res) => {
   try {
-    const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,
+    const sql = `select DISTINCT bl.id,ft.name,bl.bill_number,bl.status,ft.details,ft.address,
      ft.tel, bl.total_price,bl.created_at from bills bl 
       inner join treats tr on bl.id = tr.bill_id
       inner join firstchecks ft on bl.firstcheck_id = ft.id

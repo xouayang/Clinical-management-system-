@@ -49,6 +49,7 @@ exports.get_history_prescription = async (req, res) => {
     inner join suppliers sp on pt.supplier_id = sp.id
     inner join staffs st on pt.staff_id = st.id
     inner join prescription_details pdt on pt.id = pdt.prescription_id
+    where pt.status = 2
     order by pdt.create_at DESC
  `;
     const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
@@ -61,6 +62,39 @@ exports.get_history_prescription = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+exports.prescription_status = async (req, res) => {
+  try {
+    const sql = `
+    select DISTINCT pt.id, pdt.bill_number,sp.supplier_name,pdt.create_at,st.name as staff_name,pt.status from prescriptions pt 
+    inner join suppliers sp on pt.supplier_id = sp.id
+    inner join staffs st on pt.staff_id = st.id
+    inner join prescription_details pdt on pt.id = pdt.prescription_id
+    where pt.status = 1
+    order by pdt.create_at DESC `
+    const data = await sequelize.query(sql, { type: QueryTypes.SELECT });
+    if (data.length > 0) {
+      return res.status(200).json(data);
+    } else {
+      return res.status(200).json(data);
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+// update status prescription 
+exports.update_prescription_status = async (req, res) => {
+  try {
+    const {id} = req.params;
+    await Prescription.update({status:2}, {where:{id:id}}).then((success) => {
+      return res.status(200).json({message:"Updated"})
+    }).catch((error) => {
+      console.log(error)
+    })
+    
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+}
 // get by bill_number
 exports.get_by_bill_number = async (req, res) => {
   try {
