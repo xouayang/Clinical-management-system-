@@ -24,7 +24,7 @@ exports.getAll = async (req, res) => {
     if(data.rows.length > 0) {
       return res.status(200).json(data)
     } else {
-      return res.status(404).json({message:"NOT FOUND DATA"})
+      return res.status(200).json({message:"NOT FOUND DATA"})
     }
   }).catch((error) => {
     return res.status(400).json({message:error.message})
